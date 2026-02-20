@@ -1,0 +1,407 @@
+/* ====== RESET & BASE ====== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: rgba(255,255,255,0.08);
+    --glow-green: #107c10;
+    --xbox-green: #52b043;
+    --a-green: #4caf50;
+    --b-red: #e53935;
+    --x-blue: #1565c0;
+    --y-gold: #f9a825;
+    --text: #e0e0e0;
+    --text-dim: #777;
+    --joystick-size: min(22vw, 130px);
+    --stick-size: calc(var(--joystick-size) * 0.46);
+    --face-btn-size: min(11vw, 56px);
+    --dpad-btn-size: min(9.5vw, 46px);
+}
+
+html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Subtle grid texture */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ====== STATUS BAR ====== */
+#status-bar {
+    position: fixed;
+    top: env(safe-area-inset-top, 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    z-index: 100;
+    transition: opacity .3s;
+}
+
+#status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #ff4444;
+    box-shadow: 0 0 6px #ff4444;
+    transition: background .3s, box-shadow .3s;
+}
+#status-dot.connected { background: var(--xbox-green); box-shadow: 0 0 8px var(--xbox-green); }
+
+#player-badge {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    color: var(--xbox-green);
+    font-weight: 700;
+}
+
+/* ====== MAIN CONTROLLER LAYOUT ====== */
+#controller {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+    height: 100dvh;
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+             env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    z-index: 1;
+}
+
+/* ====== SHOULDER STRIPS ====== */
+.shoulder-strip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 8px;
+    gap: 4px;
+    width: min(18vw, 90px);
+    background: linear-gradient(180deg, #1c1c1c 0%, #161616 100%);
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+}
+.right-strip { border-right: none; }
+.left-strip  { border-left: none; }
+
+.trigger-btn {
+    position: relative;
+    width: 100%;
+    height: 64px;
+    background: var(--surface2);
+    border: none;
+    border-bottom: 3px solid rgba(255,255,255,.06);
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 5px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: .05em;
+    transition: color .1s;
+}
+.trigger-btn.active { color: white; }
+.trigger-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0%;
+    background: linear-gradient(180deg, rgba(82,176,67,.3) 0%, rgba(82,176,67,.7) 100%);
+    transition: height .05s linear;
+}
+
+.shoulder-btn {
+    width: 90%;
+    height: 36px;
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    transition: background .1s, transform .1s, box-shadow .1s;
+}
+.shoulder-btn.active {
+    background: rgba(82,176,67,.35);
+    border-color: var(--xbox-green);
+    box-shadow: 0 0 12px rgba(82,176,67,.4);
+    transform: scale(0.94);
+}
+
+/* ====== SIDE PANELS ====== */
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 10px 4px;
+}
+
+/* ====== JOYSTICK ====== */
+.joystick {
+    width: var(--joystick-size);
+    height: var(--joystick-size);
+    border-radius: 50%;
+    position: relative;
+    background: radial-gradient(circle at 35% 35%, #2e2e2e, #111);
+    box-shadow:
+        inset 0 4px 12px rgba(0,0,0,.7),
+        0 2px 8px rgba(0,0,0,.5),
+        0 0 0 3px rgba(255,255,255,.05);
+    touch-action: none;
+    flex-shrink: 0;
+}
+.joystick-base {
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1a1a1a, #0d0d0d);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.8);
+}
+.stick {
+    width: var(--stick-size);
+    height: var(--stick-size);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #555, #222);
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.9),
+        inset 0 1px 2px rgba(255,255,255,.12);
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    transition: box-shadow .05s;
+    will-change: transform;
+    pointer-events: none;
+}
+.joystick.active .stick {
+    box-shadow: 0 2px 6px rgba(0,0,0,.9), inset 0 1px 2px rgba(255,255,255,.18),
+                0 0 14px rgba(82,176,67,.3);
+}
+
+/* ====== D-PAD ====== */
+.dpad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.dpad-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.dpad-center {
+    width: var(--dpad-btn-size);
+    height: var(--dpad-btn-size);
+    background: var(--surface2);
+    border-radius: 4px;
+}
+.dpad-btn {
+    width: var(--dpad-btn-size);
+    height: var(--dpad-btn-size);
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: clamp(10px, 3vw, 16px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .08s, transform .08s;
+}
+.dpad-btn.active {
+    background: rgba(82,176,67,.3);
+    border-color: var(--xbox-green);
+    transform: scale(0.9);
+}
+
+/* ====== STICK CLICK BUTTONS ====== */
+.stick-click-btn {
+    width: 36px; height: 22px;
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    transition: background .1s, color .1s;
+}
+.stick-click-btn.active {
+    background: rgba(82,176,67,.3);
+    color: white;
+}
+
+/* ====== CENTER PANEL ====== */
+.center-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: min(20vw, 120px);
+    flex-shrink: 0;
+}
+
+.sys-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 10px;
+    color: var(--text-dim);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .1s, color .1s;
+    width: 100%;
+}
+.sys-btn.active {
+    background: rgba(82,176,67,.25);
+    border-color: rgba(82,176,67,.4);
+    color: white;
+}
+
+.xbox-home-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #1e4b1d, #0b2b0b);
+    border: 2px solid rgba(82,176,67,.4);
+    box-shadow: 0 0 20px rgba(16,124,16,.4), inset 0 1px 4px rgba(255,255,255,.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow .1s, transform .1s;
+}
+.xbox-home-btn.active {
+    box-shadow: 0 0 30px rgba(82,176,67,.8), inset 0 1px 4px rgba(255,255,255,.2);
+    transform: scale(0.94);
+}
+.xbox-home-btn svg { pointer-events: none; }
+
+/* ====== FACE BUTTONS (ABXY) ====== */
+.abxy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.abxy-mid {
+    display: flex;
+    gap: 2px;
+}
+.face-btn {
+    width: var(--face-btn-size);
+    height: var(--face-btn-size);
+    border-radius: 50%;
+    border: none;
+    color: rgba(0,0,0,.85);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(14px, 3.5vw, 20px);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,.6), inset 0 1px 3px rgba(255,255,255,.25);
+    transition: transform .08s, box-shadow .08s, filter .08s;
+    letter-spacing: .02em;
+}
+.face-btn.active {
+    transform: scale(0.88);
+    box-shadow: 0 1px 4px rgba(0,0,0,.8), inset 0 2px 5px rgba(0,0,0,.3);
+    filter: brightness(1.15);
+}
+
+.a-btn { background: linear-gradient(145deg, #66bb6a, #388e3c); color: white; }
+.b-btn { background: linear-gradient(145deg, #ef5350, #c62828); color: white; }
+.x-btn { background: linear-gradient(145deg, #42a5f5, #1565c0); color: white; }
+.y-btn { background: linear-gradient(145deg, #ffca28, #f57f17); color: rgba(0,0,0,.85); }
+
+/* ====== HAPTIC RIPPLE ====== */
+@keyframes ripple {
+    from { transform: scale(0); opacity: 0.6; }
+    to   { transform: scale(3); opacity: 0; }
+}
+.ripple {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 20px; height: 20px;
+    margin-top: -10px; margin-left: -10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    animation: ripple 0.4s ease-out forwards;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ====== LANDSCAPE LOCK OVERLAY ====== */
+#rotate-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: #0e0e0e;
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dim);
+}
+#rotate-overlay .rotate-icon {
+    font-size: 56px;
+    animation: rotateAnim 2s ease-in-out infinite;
+}
+@keyframes rotateAnim {
+    0%,100% { transform: rotate(0deg); }
+    50%      { transform: rotate(-90deg); }
+}
+
+@media (orientation: portrait) {
+    #rotate-overlay { display: flex; }
+}

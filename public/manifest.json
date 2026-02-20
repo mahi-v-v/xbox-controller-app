@@ -1,0 +1,24 @@
+{
+    "name": "Xbox Web Controller",
+    "short_name": "Controller",
+    "description": "Turn your phone into an Xbox controller over Wi-Fi",
+    "start_url": "/",
+    "display": "fullscreen",
+    "background_color": "#0e0e0e",
+    "theme_color": "#0e0e0e",
+    "orientation": "landscape",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
