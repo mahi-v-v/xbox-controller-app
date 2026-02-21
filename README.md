@@ -56,7 +56,7 @@ Head over to the **Releases** tab on the right side of this GitHub page and down
     *   Ensure both your PC and your phone are connected to the exactly the same Wi-Fi network.
     *   Windows Firewall might be blocking port `5000`. When Windows asks if you want to allow Python/Server through the firewall, click **Allow**. Or temporarily disable your firewall to test.
 *   **The server shows "ViGEmBus driver not found".**
-    *   You missed Step 1. Please install the ViGEmBus driver linked above.
+    *   It did not automatically install when you downloaded the app. Please click on the install driver button in the server app.
 
 ---
 
