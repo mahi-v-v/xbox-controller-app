@@ -41,6 +41,14 @@ Head over to the **Releases** tab on the right side of this GitHub page and down
 
 ---
 
+## 🔐 Security Considerations
+
+*   **Local Network Only:** This server binds to all network interfaces (`0.0.0.0`) on port 5000 so your phone can connect. 
+*   **Trust Your Network:** Because there is no authentication mechanism, **anyone** on your exact Wi-Fi network can connect to the port and press controller buttons on your PC. 
+*   **Best Practice:** Only run this application on private, trusted networks (like your house). Do **not** run this at a public coffee shop or airport Wi-Fi. Always click **Stop Server** or close the app when you are finished playing!
+
+---
+
 ## ❓ Troubleshooting
 
 *   **My phone cannot connect to the server (Timeout / Site Cannot Be Reached).**

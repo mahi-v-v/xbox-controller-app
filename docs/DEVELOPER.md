@@ -106,3 +106,12 @@ You can automate this using the provided PowerShell script:
 
 The final standalone application will be generated at:
 `dist\XboxController Server.exe`
+
+---
+
+## 🔐 Security & Threat Model
+
+As a developer, please be aware of the following design choices regarding security:
+*   **Unauthenticated Websockets:** The system uses `cors_allowed_origins="*"` and has no authentication token exchange. This is intentionally done to provide a frictionless "scan and play" experience for users. 
+*   **Network Exposure:** The server binds to `0.0.0.0`, leaving port 5000 open to horizontal network traffic.
+*   **Input Validation:** Socket payloads are parsed inside a `try/except (ValueError, TypeError, AttributeError)` block to prevent malformed data from causing application-level exceptions, defending against basic DoS attempts.

@@ -184,26 +184,33 @@ class ServerThread(threading.Thread):
                 gp = gamepads.get(flask_request.sid)
                 if not gp:
                     return
-                ls = data.get('ls', {})
-                rs = data.get('rs', {})
-                gp.left_joystick_float(
-                    x_value_float=float(ls.get('x', 0)),
-                    y_value_float=-float(ls.get('y', 0))
-                )
-                gp.right_joystick_float(
-                    x_value_float=float(rs.get('x', 0)),
-                    y_value_float=-float(rs.get('y', 0))
-                )
-                gp.left_trigger_float(value_float=float(data.get('lt', 0)))
-                gp.right_trigger_float(value_float=float(data.get('rt', 0)))
-                buttons = data.get('buttons', {})
-                for btn_id, pressed in buttons.items():
-                    if btn_id in BUTTON_MAP:
-                        if pressed:
-                            gp.press_button(button=BUTTON_MAP[btn_id])
-                        else:
-                            gp.release_button(button=BUTTON_MAP[btn_id])
-                gp.update()
+                try:
+                    ls = data.get('ls', {})
+                    rs = data.get('rs', {})
+                    if not isinstance(ls, dict): ls = {}
+                    if not isinstance(rs, dict): rs = {}
+                    
+                    gp.left_joystick_float(
+                        x_value_float=float(ls.get('x', 0)),
+                        y_value_float=-float(ls.get('y', 0))
+                    )
+                    gp.right_joystick_float(
+                        x_value_float=float(rs.get('x', 0)),
+                        y_value_float=-float(rs.get('y', 0))
+                    )
+                    gp.left_trigger_float(value_float=float(data.get('lt', 0)))
+                    gp.right_trigger_float(value_float=float(data.get('rt', 0)))
+                    buttons = data.get('buttons', {})
+                    if isinstance(buttons, dict):
+                        for btn_id, pressed in buttons.items():
+                            if btn_id in BUTTON_MAP:
+                                if pressed:
+                                    gp.press_button(button=BUTTON_MAP[btn_id])
+                                else:
+                                    gp.release_button(button=BUTTON_MAP[btn_id])
+                    gp.update()
+                except (ValueError, TypeError, AttributeError):
+                    pass # Ignore malformed payloads
 
             self.log(f"Server started on http://{self.host}:{self.port}")
             socketio.run(app, host='0.0.0.0', port=self.port,

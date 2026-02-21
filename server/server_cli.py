@@ -86,32 +86,39 @@ def handle_input(data):
     if not gp:
         return
 
-    # ─ Joysticks ─
-    ls = data.get('ls', {})
-    rs = data.get('rs', {})
-    gp.left_joystick_float(
-        x_value_float=float(ls.get('x', 0)),
-        y_value_float=-float(ls.get('y', 0))
-    )
-    gp.right_joystick_float(
-        x_value_float=float(rs.get('x', 0)),
-        y_value_float=-float(rs.get('y', 0))
-    )
+    try:
+        # ─ Joysticks ─
+        ls = data.get('ls', {})
+        rs = data.get('rs', {})
+        if not isinstance(ls, dict): ls = {}
+        if not isinstance(rs, dict): rs = {}
+        
+        gp.left_joystick_float(
+            x_value_float=float(ls.get('x', 0)),
+            y_value_float=-float(ls.get('y', 0))
+        )
+        gp.right_joystick_float(
+            x_value_float=float(rs.get('x', 0)),
+            y_value_float=-float(rs.get('y', 0))
+        )
 
-    # ─ Triggers (analog 0.0 – 1.0) ─
-    gp.left_trigger_float(value_float=float(data.get('lt', 0)))
-    gp.right_trigger_float(value_float=float(data.get('rt', 0)))
+        # ─ Triggers (analog 0.0 – 1.0) ─
+        gp.left_trigger_float(value_float=float(data.get('lt', 0)))
+        gp.right_trigger_float(value_float=float(data.get('rt', 0)))
 
-    # ─ Buttons ─
-    buttons = data.get('buttons', {})
-    for btn_id, pressed in buttons.items():
-        if btn_id in BUTTON_MAP:
-            if pressed:
-                gp.press_button(button=BUTTON_MAP[btn_id])
-            else:
-                gp.release_button(button=BUTTON_MAP[btn_id])
+        # ─ Buttons ─
+        buttons = data.get('buttons', {})
+        if isinstance(buttons, dict):
+            for btn_id, pressed in buttons.items():
+                if btn_id in BUTTON_MAP:
+                    if pressed:
+                        gp.press_button(button=BUTTON_MAP[btn_id])
+                    else:
+                        gp.release_button(button=BUTTON_MAP[btn_id])
 
-    gp.update()
+        gp.update()
+    except (ValueError, TypeError, AttributeError):
+        pass  # Ignore malformed payloads
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
