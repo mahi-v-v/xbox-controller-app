@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xbox Web Controller</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">🎮 Xbox Web Controller</div>
+            <a href="https://github.com/yourusername/xbox-controller-app" target="_blank" class="github-link">GitHub</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Turn your Phone into a PC Controller</h1>
+            <p>A fast, free, and open-source virtual gamepad that connects your Android or iOS device to your PC over
+                Wi-Fi. Features custom layout presets, an editable interface, and haptic feedback.</p>
+            <div class="hero-actions">
+                <a href="#downloads" class="btn btn-primary">Download Now</a>
+                <a href="#how-it-works" class="btn btn-secondary">How it Works</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="downloads" class="downloads-section">
+        <h2>📥 Get Started</h2>
+        <div class="cards-container">
+            <!-- PC Server Card -->
+            <div class="download-card">
+                <div class="card-icon">💻</div>
+                <h3>1. PC Server</h3>
+                <p>You are currently running the PC server. Keep this window open to receive inputs from your phone.</p>
+                <div class="tags">
+                    <span class="tag">Windows 10/11</span>
+                    <span class="tag">Running</span>
+                </div>
+                <div class="dependency-note" style="margin-top: 1rem;">
+                    <strong>Note:</strong> Requires the <a href="https://github.com/nefarius/ViGEmBus/releases/latest"
+                        target="_blank">ViGEmBus Driver</a> to emulate a real Xbox controller.
+                </div>
+            </div>
+
+            <!-- Mobile App Card -->
+            <div class="download-card">
+                <div class="card-icon">📱</div>
+                <h3>2. Mobile App</h3>
+                <p>Install the controller app on your phone, or play directly in your browser.</p>
+                <div class="tags">
+                    <span class="tag">Android APK</span>
+                    <span class="tag">iOS Web App (PWA)</span>
+                </div>
+                <!-- Link to local APK route -->
+                <a href="/download/apk" class="btn btn-download">
+                    Download Android (.apk)
+                </a>
+
+                <a href="/play/" class="btn btn-primary" style="margin-bottom: 1.5rem; text-align: center;">
+                    Play in Browser (PWA)
+                </a>
+                <div class="ios-note">
+                    <p><strong>iOS Users:</strong> Tap <em>"Play in Browser"</em>, then tap the Share icon and select
+                        <em>"Add to Home Screen"</em>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="guide-section">
+        <h2>⚙️ Setup Guide</h2>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Install Driver</h3>
+                <p>Download and install the <a href="https://github.com/nefarius/ViGEmBus/releases/latest"
+                        target="_blank">ViGEmBus Driver</a> on your PC. This tells Windows that a real controller is
+                    plugged in.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Run Server</h3>
+                <p>Launch <code>XboxController Server.exe</code> on your PC. It will display a QR code and a local IP
+                    address (like <code>192.168.1.100:5000</code>).</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Connect App</h3>
+                <p>Open the app on your phone (or go to the IP address in your browser). Enter the IP shown on your PC,
+                    and you're ready to play!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>Xbox Web Controller - Open Source Project</p>
+            <p><a href="https://github.com/yourusername/xbox-controller-app" target="_blank">View Source on GitHub</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Controller">
+    <meta name="theme-color" content="#0e0e0e">
+    <title>Xbox Web Controller</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ===== CONNECTION SETTINGS OVERLAY ===== -->
+    <div id="connect-overlay">
+        <div class="connect-card">
+            <div class="connect-logo">
+                <svg viewBox="0 0 100 100" width="64" height="64">
+                    <circle cx="50" cy="50" r="48" fill="#107c10" />
+                    <text x="50" y="67" text-anchor="middle" font-size="62" font-family="Arial" fill="white"
+                        font-weight="bold">⊕</text>
+                </svg>
+            </div>
+            <h1 class="connect-title">Xbox Web Controller</h1>
+            <p class="connect-subtitle">Enter your PC's server address</p>
+            <div class="connect-fields">
+                <div class="connect-ip-group">
+                    <label for="server-ip">IP Address</label>
+                    <input type="text" id="server-ip" placeholder="192.168.1.100" autocomplete="off" autocorrect="off"
+                        autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="connect-port-group">
+                    <label for="server-port">Port</label>
+                    <input type="number" id="server-port" value="5000" min="1" max="65535">
+                </div>
+            </div>
+            <button id="connect-btn" class="connect-btn">
+                <span class="connect-btn-text">Connect</span>
+                <span class="connect-btn-spinner" style="display:none;"></span>
+            </button>
+            <p id="connect-error" class="connect-error"></p>
+            <p class="connect-hint">Run <code>python app.py</code> on your PC first</p>
+        </div>
+    </div>
+
+    <!-- Connection Status Pill -->
+    <div id="status-bar">
+        <span id="status-dot"></span>
+        <span id="status-text">Connecting…</span>
+        <span id="player-badge"></span>
+        <button id="layout-toggle-btn" class="status-icon-btn layout-toggle" onclick="cyclePreset()"
+            title="Change Layout">
+            <span id="layout-toggle-label">🎮 Default</span>
+        </button>
+        <button id="settings-btn" class="status-icon-btn" title="Connection Settings">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path
+                    d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 00-.48-.41h-3.84a.48.48 0 00-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87a.48.48 0 00.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z" />
+            </svg>
+        </button>
+    </div>
+
+    <div id="controller">
+
+        <!-- ===== LEFT SHOULDER STRIP ===== -->
+        <div class="shoulder-strip left-strip" data-element-id="left-strip">
+            <button id="lt" class="trigger-btn" data-label="LT" data-element-id="lt">
+                <div class="trigger-fill" id="lt-fill"></div>
+                <span>LT</span>
+            </button>
+            <button id="lb" class="shoulder-btn" data-element-id="lb">LB</button>
+        </div>
+
+        <!-- ===== LEFT PANEL ===== -->
+        <div class="panel left-panel" data-element-id="left-panel">
+            <!-- Left Stick -->
+            <div id="ls" class="joystick" data-element-id="ls">
+                <div class="joystick-base"></div>
+                <div class="stick" id="ls-stick"></div>
+            </div>
+
+            <!-- D-Pad -->
+            <div class="dpad" data-element-id="dpad">
+                <button id="dpad-up" class="dpad-btn dpad-up">▲</button>
+                <div class="dpad-row">
+                    <button id="dpad-left" class="dpad-btn dpad-left">◀</button>
+                    <div class="dpad-center"></div>
+                    <button id="dpad-right" class="dpad-btn dpad-right">▶</button>
+                </div>
+                <button id="dpad-down" class="dpad-btn dpad-down">▼</button>
+            </div>
+
+            <!-- Left Stick Click (LS) -->
+            <button id="ls-click" class="stick-click-btn" data-element-id="ls-click">LS</button>
+        </div>
+
+        <!-- ===== CENTER PANEL ===== -->
+        <div class="center-panel" data-element-id="center-panel">
+            <button id="view" class="sys-btn" data-element-id="view">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                    <rect x="2" y="5" width="9" height="7" rx="1" />
+                    <rect x="13" y="5" width="9" height="7" rx="1" opacity=".5" />
+                    <rect x="2" y="14" width="9" height="5" rx="1" opacity=".5" />
+                    <rect x="13" y="14" width="9" height="5" rx="1" />
+                </svg>
+                <span>View</span>
+            </button>
+            <button id="home" class="xbox-home-btn" data-element-id="home">
+                <svg viewBox="0 0 100 100" width="32" height="32">
+                    <circle cx="50" cy="50" r="48" fill="#107c10" />
+                    <text x="50" y="67" text-anchor="middle" font-size="62" font-family="Arial" fill="white"
+                        font-weight="bold">⊕</text>
+                </svg>
+            </button>
+            <button id="menu" class="sys-btn" data-element-id="menu">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                    <rect x="4" y="7" width="4" height="1.5" rx=".75" />
+                    <rect x="10" y="7" width="10" height="1.5" rx=".75" />
+                    <rect x="4" y="11" width="4" height="1.5" rx=".75" />
+                    <rect x="10" y="11" width="10" height="1.5" rx=".75" />
+                    <rect x="4" y="15" width="4" height="1.5" rx=".75" />
+                    <rect x="10" y="15" width="10" height="1.5" rx=".75" />
+                </svg>
+                <span>Menu</span>
+            </button>
+        </div>
+
+        <!-- ===== RIGHT PANEL ===== -->
+        <div class="panel right-panel" data-element-id="right-panel">
+            <!-- ABXY Cluster -->
+            <div class="abxy" data-element-id="abxy">
+                <button id="y" class="face-btn y-btn">Y</button>
+                <div class="abxy-mid">
+                    <button id="x" class="face-btn x-btn">X</button>
+                    <button id="b" class="face-btn b-btn">B</button>
+                </div>
+                <button id="a" class="face-btn a-btn">A</button>
+            </div>
+
+            <!-- Right Stick -->
+            <div id="rs" class="joystick" data-element-id="rs">
+                <div class="joystick-base"></div>
+                <div class="stick" id="rs-stick"></div>
+            </div>
+
+            <!-- Right Stick Click (RS) -->
+            <button id="rs-click" class="stick-click-btn" data-element-id="rs-click">RS</button>
+        </div>
+
+        <!-- ===== RIGHT SHOULDER STRIP ===== -->
+        <div class="shoulder-strip right-strip" data-element-id="right-strip">
+            <button id="rt" class="trigger-btn" data-label="RT" data-element-id="rt">
+                <div class="trigger-fill" id="rt-fill"></div>
+                <span>RT</span>
+            </button>
+            <button id="rb" class="shoulder-btn" data-element-id="rb">RB</button>
+        </div>
+
+    </div>
+
+    <!-- Portrait lock overlay -->
+    <div id="rotate-overlay">
+        <div class="rotate-icon">📱</div>
+        <div>Rotate your phone to landscape</div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="layouts.js"></script>
+    <script src="app.js"></script>
+    <script src="editor.js"></script>
+    <script>
+        // Register service worker for PWA (skip inside Capacitor)
+        if ('serviceWorker' in navigator && !window.Capacitor) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+</body>
+
+</html>

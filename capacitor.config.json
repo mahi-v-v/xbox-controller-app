@@ -1,0 +1,12 @@
+{
+    "appId": "com.xboxcontroller.app",
+    "appName": "Xbox Controller",
+    "webDir": "webapp",
+    "server": {
+        "androidScheme": "http",
+        "cleartext": true
+    },
+    "android": {
+        "allowMixedContent": true
+    }
+}

@@ -1,0 +1,5 @@
+flask==3.0.0
+flask-socketio==5.3.6
+vgamepad==0.1.0
+qrcode[pil]==7.4.2
+eventlet==0.34.3
