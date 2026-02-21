@@ -85,7 +85,16 @@ The mobile app is wrapped using Ionic Capacitor.
    Copy-Item "android\app\build\outputs\apk\debug\app-debug.apk" -Destination "apk\app-debug.apk"
    ```
 
-### Step 2: Compile the Windows Server (.exe)
+### Step 2: Add the Driver
+For a seamless user experience, we bundle the official ViGEmBus installer.
+1. Download the latest `ViGEmBus_Setup_...exe` from [GitHub](https://github.com/nefarius/ViGEmBus/releases)
+2. Create a `drivers/` folder in your project root and place the `.exe` inside:
+   ```bash
+   mkdir drivers
+   # Drop ViGEmBus installer here
+   ```
+
+### Step 3: Compile the Windows Server (.exe)
 We use `PyInstaller` to bundle the server, the webapp, the landing website, and the APK into a single portable `.exe` file.
 
 You can automate this using the provided PowerShell script:

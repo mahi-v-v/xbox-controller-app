@@ -11,7 +11,11 @@ from tkinter import ttk, scrolledtext, messagebox
 # ── Fix for PyInstaller bundled paths ─────────────────────────────────────────
 def resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller."""
-    base = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    if hasattr(sys, '_MEIPASS'):
+        # PyInstaller extracts to _MEIPASS. Data folders are at the root.
+        clean_path = relative_path.replace('../', '').replace('..\\', '')
+        return os.path.join(sys._MEIPASS, clean_path)
+    base = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base, relative_path)
 
 # ── Logging redirect to GUI ──────────────────────────────────────────────────
@@ -377,13 +381,38 @@ class ControllerServerApp:
         if installed:
             self.vigem_label.config(text="✅ ViGEmBus driver detected",
                                      fg=self.GREEN)
+            if hasattr(self, 'install_driver_btn') and self.install_driver_btn.winfo_exists():
+                self.install_driver_btn.destroy()
         else:
             self.vigem_label.config(
-                text="⚠️ ViGEmBus driver not found!\nInstall it from:\ngithub.com/nefarius/ViGEmBus/releases",
+                text="⚠️ ViGEmBus driver not found!",
                 fg="#ffa726"
             )
-            self._log_message("[WARNING] ViGEmBus driver not installed. "
-                            "Download from github.com/nefarius/ViGEmBus/releases")
+            
+            if not hasattr(self, 'install_driver_btn') or not self.install_driver_btn.winfo_exists():
+                self.install_driver_btn = tk.Button(self.vigem_label.master, text="🔧 Install Driver",
+                                                    font=self.FONT_BOLD, bg="#2a2a4a",
+                                                    fg=self.TEXT, activebackground="#3a3a5a",
+                                                    activeforeground=self.TEXT, relief=tk.FLAT,
+                                                    cursor="hand2", command=self._install_driver)
+                self.install_driver_btn.pack(fill=tk.X, padx=12, pady=(0, 12))
+            
+            self._log_message("[WARNING] ViGEmBus driver not installed. Click 'Install Driver'.")
+
+    def _install_driver(self):
+        import glob
+        drivers_dir = resource_path('../drivers')
+        installers = glob.glob(os.path.join(drivers_dir, '*.exe')) + glob.glob(os.path.join(drivers_dir, '*.msi'))
+        if installers:
+            installer_path = installers[0]
+            self._log_message(f"[INFO] Launching {os.path.basename(installer_path)}...")
+            try:
+                os.startfile(installer_path)
+                self._log_message("[INFO] After installing, please restart this server.")
+            except Exception as e:
+                self._log_message(f"[ERROR] Failed to run installer: {e}")
+        else:
+            self._log_message("[ERROR] Driver installer not found in the bundled 'drivers' folder.")
 
     def _toggle_server(self):
         if self.server_thread and self.server_thread.running:

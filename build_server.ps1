@@ -31,12 +31,14 @@ Write-Host ">>> Bundling application with PyInstaller..." -ForegroundColor Yello
     --add-data "webapp;webapp" `
     --add-data "website;website" `
     --add-data "apk;apk" `
+    --add-data "drivers;drivers" `
     --collect-all vgamepad `
     --hidden-import engineio.async_drivers.threading `
     server\server_gui.py -y
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ">>> Build Successful! Executable is located at dist\XboxController Server.exe" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host ">>> Build Failed with exit code $LASTEXITCODE" -ForegroundColor Red
 }

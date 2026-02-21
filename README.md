@@ -16,19 +16,15 @@ This app allows you to connect your phone locally to your Windows PC. The server
 
 ## 🚀 Quick Start Guide
 
-### Step 1: Install the Windows Driver
-For your PC to detect the virtual controller, you must install the official ViGEmBus driver.
-1. Download here: [ViGEmBus Release Page](https://github.com/nefarius/ViGEmBus/releases/latest)
-2. Run the installer (`ViGEmBus_Setup_...exe`) and follow the prompts.
-
-### Step 2: Download the Application
+### Step 1: Download the Application
 Head over to the **Releases** tab on the right side of this GitHub page and download the latest:
 *   `XboxController Server.exe`
 
-### Step 3: Run the Server
+### Step 2: Install Driver & Start Server
 1. Double-click `XboxController Server.exe` on your PC.
-2. Click **Start Server**.
-3. A QR code and an IP Address (e.g., `192.168.1.100:5000`) will appear. Keep this window open!
+2. The app requires the official ViGEmBus driver. If this is your first time, click the **🔧 Install Driver** button inside the app (or accept the prompt if it bundled).
+3. Once the driver is verified, click **Start Server**.
+4. A QR code and an IP Address (e.g., `192.168.1.100:5000`) will appear. Keep this window open!
 
 ### Step 4: Connect Your Phone (Two Ways)
 
