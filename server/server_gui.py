@@ -240,8 +240,8 @@ class ControllerServerApp:
         self.root = root
         self.root.title("Xbox Controller Server")
         self.root.configure(bg=self.BG)
-        self.root.geometry("680x520")
-        self.root.minsize(600, 450)
+        self.root.geometry("720x600")
+        self.root.minsize(680, 500)
         self.root.resizable(True, True)
 
         self.server_thread = None

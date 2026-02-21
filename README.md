@@ -10,6 +10,7 @@ This app allows you to connect your phone locally to your Windows PC. The server
 - **Zero Install for Phones:** Run instantly in your phone's browser or download the Android APK directly from your PC!
 - **Haptic Feedback:** Authentic vibration when pressing buttons.
 - **Multiple Layouts:** Switch between Xbox, PlayStation, Nintendo, Southpaw, Racing, and Minimal styles.
+- **Multiplayer Support:** Up to 4 phones can connect to the server at exactly the same time, perfect for split-screen couch co-op games! Each phone is assigned its own Player Slot (1-4).
 - **Standalone Server:** The PC server boasts a clean UI, live connection logs, and a scannable QR code. It bundles everything into one file!
 
 ---
